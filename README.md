@@ -105,3 +105,7 @@ export LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
 ```
 
 > Note: 在 IDE 中，可在启动配置中设置。
+
+## License
+
+[Apache 2.0](./LICENSE)
