@@ -1,0 +1,3 @@
+[submodule "thirdparty/HivisionIDPhotos-cpp"]
+	path = thirdparty/HivisionIDPhotos-cpp
+	url = git@github.com:crazydan-studio/HivisionIDPhotos-cpp.git
