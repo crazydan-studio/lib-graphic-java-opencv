@@ -7,8 +7,10 @@ BUILDER_DCR_IMAGE="opencv-builder-base"
 SOURCE_DIR="${DIR}/../build/source"
 LIB_DIR="${DIR}/../lib"
 
+TARGET_PLATFORM="linux-x86-64"
 
-mkdir -p "${SOURCE_DIR}" "${LIB_DIR}"
+
+mkdir -p "${SOURCE_DIR}" "${LIB_DIR}/${TARGET_PLATFORM}"
 
 
 echo "================================================"
@@ -63,7 +65,6 @@ docker exec -it ${BUILDER_DCR_NAME} \
             -DCMAKE_INSTALL_PREFIX=/opt/opencv \
         && make --directory=build/opencv -j4 \
         && make --directory=build/opencv install \
-        && ldd /opt/opencv/share/java/opencv4/libopencv_java481.so \
     " || exit 1
 
 
@@ -92,8 +93,6 @@ docker exec -it ${BUILDER_DCR_NAME} \
             -DCMAKE_INSTALL_PREFIX=/opt/mnn \
         && make --directory=build/mnn -j4 \
         && make --directory=build/mnn install \
-        && ldd /opt/mnn/lib/libMNN.so \
-        && ldd /opt/mnn/lib/libMNN_Express.so \
     " || exit 1
 
 
@@ -125,6 +124,20 @@ docker exec -it ${BUILDER_DCR_NAME} \
             -DEXTERN_LIBRARY_PATH=\"/opt/opencv/lib;/opt/mnn/lib\" \
             -DCMAKE_INSTALL_PREFIX=/opt/hivision \
         && make --directory=build/hivision -j4 \
+    " || exit 1
+
+
+echo "================================================"
+echo "     Check Shared Libraries"
+echo "------------------------------------------------"
+echo
+echo
+
+docker exec -it ${BUILDER_DCR_NAME} \
+    bash -c " \
+        ldd /opt/opencv/share/java/opencv4/libopencv_java481.so \
+        && ldd /opt/mnn/lib/libMNN.so \
+        && ldd /opt/mnn/lib/libMNN_Express.so \
         && ldd build/hivision/libHivisionIDphotos.so \
     " || exit 1
 
@@ -138,12 +151,16 @@ echo
 # 从 so 的安装位置直接复制动态库到目标目录
 docker exec -it ${BUILDER_DCR_NAME} \
     bash -c " \
-        cp -r /opt/opencv/share/java/opencv4/* /target/ \
-        && cp /opt/opencv/lib/*.so* /target/ \
-        && cp /opt/mnn/lib/*.so* /target/ \
-        && cp /usr/lib/x86_64-linux-gnu/libopenjp2.so* /target/ \
-        && cp build/hivision/libHivisionIDphotos.so /target/ \
-        && chmod -x /target/libHivisionIDphotos.so \
+        cp /opt/opencv/share/java/opencv4/*.so /target/${TARGET_PLATFORM}/ \
+        && cp /opt/opencv/share/java/opencv4/*.jar /target/ \
+        \
+        && cp /opt/opencv/lib/*.so* /target/${TARGET_PLATFORM}/ \
+        && cp /opt/mnn/lib/*.so* /target/${TARGET_PLATFORM}/ \
+        && cp /usr/lib/x86_64-linux-gnu/libopenjp2.so* /target/${TARGET_PLATFORM}/ \
+        \
+        && cp build/hivision/libHivisionIDphotos.so /target/${TARGET_PLATFORM}/ \
+        \
+        && chmod -x /target/${TARGET_PLATFORM}/* \
     " || exit 1
 
 

@@ -30,8 +30,9 @@ public class IDCardPhotoMaker {
     private static final HivisionJNA jna;
 
     static {
-        // Note: 指定 JNA 的动态库搜索路径
-        System.setProperty("jna.library.path", System.getenv("LD_LIBRARY_PATH"));
+        // Note: JNA 默认支持从环境变量 LD_LIBRARY_PATH 中指定的路径搜索本地库，不需要单独设置
+        // Platform.RESOURCE_PREFIX -> linux-x86-64
+        //System.setProperty("jna.library.path", System.getenv("LD_LIBRARY_PATH"));
 
         jna = Native.load(HivisionJNA.NATIVE_LIBRARY_NAME, HivisionJNA.class);
     }

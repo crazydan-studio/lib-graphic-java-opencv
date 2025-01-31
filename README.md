@@ -35,28 +35,32 @@ bash scripts/6.build-lib.sh
 
 ```
 ./lib/
-├── libHivisionIDphotos.so
-├── libMNN_Express.so
-├── libMNN.so
-├── libopencv_core.so
-├── libopencv_core.so.408
-├── libopencv_core.so.4.8.1
-├── libopencv_imgcodecs.so
-├── libopencv_imgcodecs.so.408
-├── libopencv_imgcodecs.so.4.8.1
-├── libopencv_imgproc.so
-├── libopencv_imgproc.so.408
-├── libopencv_imgproc.so.4.8.1
-├── libopencv_java481.so
-├── libopenjp2.so
-├── libopenjp2.so.2.3.0
-├── libopenjp2.so.7
-└── opencv-481.jar
+├── linux-x86-64
+│   ├── libHivisionIDphotos.so
+│   ├── libMNN_Express.so
+│   ├── libMNN.so
+│   ├── libopencv_core.so
+│   ├── libopencv_core.so.408
+│   ├── libopencv_core.so.4.8.1
+│   ├── libopencv_imgcodecs.so
+│   ├── libopencv_imgcodecs.so.408
+│   ├── libopencv_imgcodecs.so.4.8.1
+│   ├── libopencv_imgproc.so
+│   ├── libopencv_imgproc.so.408
+│   ├── libopencv_imgproc.so.4.8.1
+│   ├── libopencv_java481.so
+│   ├── libopenjp2.so
+│   ├── libopenjp2.so.2.3.0
+│   └── libopenjp2.so.7
+├── opencv-481.jar
+└── win32-x86-64
 ```
 
 > Note: 其中的软链接均为相对于所在目录的路径，不需要调整。
 
 ### 导入 OpenCV 的 Java 包
+
+> Note: 仅在需要通过 Java 单独调用 OpenCV 接口时，才需要导入其 JNI 包。
 
 ```bash
 bash maven/install-file.sh \
@@ -89,6 +93,9 @@ bash maven/install-file.sh \
     </dependencies>
 ```
 
+> `file:///${project.basedir}` 指向的是 `pom.xml` 所在模块的目录位置，
+> 若有多级子模块，则需要采用相对路径 `../` 以指向项目根目录。
+
 ## 准备 AI 模型文件
 
 按照 [model/README.md](./model/README.md) 的说明，将相关模型下载到 `model/` 目录。
@@ -101,7 +108,7 @@ bash maven/install-file.sh \
 需要为其执行环境设置环境变量 `LD_LIBRARY_PATH`，并指向 OpenCV 等动态库的位置：
 
 ```bash
-export LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=`pwd`/lib/linux-x86-64:$LD_LIBRARY_PATH
 ```
 
 > Note: 在 IDE 中，可在启动配置中设置。
