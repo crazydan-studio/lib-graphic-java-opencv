@@ -3,6 +3,10 @@ Java OpenCV 功能库
 
 ## 本地构建 OpenCV 动态库
 
+可按平台直接下载以下预编译版本：
+
+- [OpenCV-HivisionIDPhotos-MNN-linux-x86-64.zip](https://github.com/crazydan-studio/lib-graphic-java-opencv/releases/download/v0.0.1/OpenCV-HivisionIDPhotos-MNN-linux-x86-64.zip): 针对 Linux x86 64 位操作系统
+
 ### 构建基础镜像
 
 ```bash
